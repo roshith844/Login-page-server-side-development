@@ -1,4 +1,4 @@
-const http = require('http')
+ const http = require('http')
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
@@ -21,6 +21,10 @@ app.set('view engine','ejs')
 app.get('/login',(req,res)=>{
      res.render('login')
  })
+ app.get('/form-submit',(req,res)=>{
+     console.log(req.query)
+ })
+
  //server
 http.createServer(app).listen(8000,()=>{
      console.log("running")
