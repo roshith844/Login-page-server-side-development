@@ -22,7 +22,10 @@ app.get('/login',(req,res)=>{
      res.render('login')
  })
  app.get('/form-submit',(req,res)=>{
-     console.log(req.query)
+     if(req.query.email === 'a@a.com' && req.query.password=='a'){
+          console.log("passed")
+     }
+    
  })
 
  //server
