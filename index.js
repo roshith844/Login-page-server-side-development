@@ -4,6 +4,7 @@ const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 
 //initialises npm modules
 app.use(express.urlencoded({ extended: true }));
@@ -48,8 +49,8 @@ app.get('/', (req,res)=>{
      if(req.session.user){
           res.render('home')
      }else{
-
           res.render('login')
+          
      }
 })
 app.post('/form-submit',(req,res)=>{
@@ -58,7 +59,7 @@ app.post('/form-submit',(req,res)=>{
           console.log('Logged In')
           res.render('home')
      }else{
-          
+         
           res.redirect('/')
      }
 
