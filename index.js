@@ -5,10 +5,14 @@ const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-
 //initialises npm modules
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// cache
+app.use((req, res, next) => {
+     res.set('Cache-Control', 'no-store')
+     next()
+   })
 
 app.use(cookieParser())
 app.use(session(
@@ -35,22 +39,29 @@ app.use(session({
 
 }))
 
-// cache
 
-app.use((req, res, next) => {
-     res.set(
-         "Cache-Control",
-         "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-     );
-     next()
- })
 //navigation
-app.get('/', (req,res)=>{
+//new code
+app.get('/login', (req,res)=>{
+       res.render('login')
+})
+app.get('/logout', (req, res) => {
+     req.session.destroy((error)=>{
+         if(error){
+             console.log(error);
+         }else{
+             console.log('logout successfully');
+             res.redirect('/login');
+         }
+ 
+     })
+ })
+
+ app.get('/', (req,res)=>{
      if(req.session.user){
           res.render('home')
      }else{
-          res.render('login')
-          
+          res.redirect('/login')
      }
 })
 app.post('/form-submit',(req,res)=>{
@@ -59,24 +70,11 @@ app.post('/form-submit',(req,res)=>{
           console.log('Logged In')
           res.render('home')
      }else{
-         
-          res.redirect('/')
+          res.render('login',{layout : './layouts/invalid.ejs'})
      }
 
 })
-app.get('/logout', (req, res) => {
-     req.session.destroy((error)=>{
-         if(error){
-             console.log(error);
-         }else{
-             console.log('logout successfully');
-             res.redirect('/');
-         }
- 
-     })
- })
- 
-
+//new code ends
 // app.get('/login',(req,res)=>{
 //      res.render('login')
 //  })
