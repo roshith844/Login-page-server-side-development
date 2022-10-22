@@ -6,6 +6,9 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
 //initialises npm modules
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use(cookieParser())
 app.use(session(
      {
@@ -20,11 +23,11 @@ app.set('view engine','ejs')
 
 //predefined email and password
 const user = {
-     userName: 'pass',
+     userName: 'pass@mail.com',
     password: 123
 }
 app.use(session({
-     secret: 'pass',
+     secret: 'pass@mail.com',
      saveUninitialized: true,
     cookie: { maxAge: 60000 },
     resave: false
@@ -45,29 +48,34 @@ app.get('/', (req,res)=>{
      if(req.session.user){
           res.render('home')
      }else{
+
           res.render('login')
      }
 })
 app.post('/form-submit',(req,res)=>{
-     if(req.body.user === user.userName && req.body.password == user.password){
-          req.session.user = req.body.user
+     if(req.body.email === user.userName && req.body.password == user.password){
+          req.session.user = req.body.email
           console.log('Logged In')
           res.render('home')
      }else{
-          res.redirect('./')
+          
+          res.redirect('/')
      }
 
 })
-app.get('logout',(req,res)=>{
+app.get('/logout', (req, res) => {
      req.session.destroy((error)=>{
-          if(error){
-               console.log('error!!')
-          }else{
-               console.log('logged out')
-               res.redirect('/')
-          }
+         if(error){
+             console.log(error);
+         }else{
+             console.log('logout successfully');
+             res.redirect('/');
+         }
+ 
      })
-})
+ })
+ 
+
 // app.get('/login',(req,res)=>{
 //      res.render('login')
 //  })
