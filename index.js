@@ -58,6 +58,16 @@ app.post('/form-submit',(req,res)=>{
      }
 
 })
+app.get('logout',(req,res)=>{
+     req.session.destroy((error)=>{
+          if(error){
+               console.log('error!!')
+          }else{
+               console.log('logged out')
+               res.redirect('/')
+          }
+     })
+})
 // app.get('/login',(req,res)=>{
 //      res.render('login')
 //  })
