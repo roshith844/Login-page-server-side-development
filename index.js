@@ -1,4 +1,5 @@
- const http = require('http')
+// calls required modules
+const http = require('http')
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
@@ -8,12 +9,12 @@ const bodyParser = require('body-parser')
 //initialises npm modules
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// cache
+// middlewares not to store cache
 app.use((req, res, next) => {
      res.set('Cache-Control', 'no-store')
      next()
-   })
-
+})
+// initiates cookie and session
 app.use(cookieParser())
 app.use(session(
      {
@@ -22,71 +23,61 @@ app.use(session(
           secret: 'secret'
      }
 ))
+
 app.use(expressLayouts)
-app.set('layout','./layouts/page.ejs')
-app.set('view engine','ejs')
+app.set('layout', './layouts/page.ejs')
+app.set('view engine', 'ejs')
 
 //predefined email and password
 const user = {
      userName: 'pass@mail.com',
-    password: 123
+     password: 123
 }
 app.use(session({
      secret: 'pass@mail.com',
      saveUninitialized: true,
-    cookie: { maxAge: 60000 },
-    resave: false
+     cookie: { maxAge: 60000 },
+     resave: false
 
 }))
 
 
-//navigation
-//new code
-app.get('/login', (req,res)=>{
-       res.render('login')
-})
-app.get('/logout', (req, res) => {
-     req.session.destroy((error)=>{
-         if(error){
-             console.log(error);
-         }else{
-             console.log('logout successfully');
-             res.redirect('/login');
-         }
- 
-     })
- })
+//navigates to routes
 
- app.get('/', (req,res)=>{
-     if(req.session.user){
+app.get('/login', (req, res) => {
+     res.render('login')
+})
+// logs out with destroying session
+app.get('/logout', (req, res) => {
+     req.session.destroy((error) => {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log('logout successfully');
+               res.redirect('/login');
+          }
+
+     })
+})
+
+app.get('/', (req, res) => {
+     if (req.session.user) {
           res.render('home')
-     }else{
+     } else {
           res.redirect('/login')
      }
 })
-app.post('/form-submit',(req,res)=>{
-     if(req.body.email === user.userName && req.body.password == user.password){
+app.post('/form-submit', (req, res) => {
+     if (req.body.email === user.userName && req.body.password == user.password) {
           req.session.user = req.body.email
           console.log('Logged In')
           res.redirect('/')
-     }else{
-          res.render('login',{layout : './layouts/invalid.ejs'})
+     } else {
+          res.render('login', { layout: './layouts/invalid.ejs' })
      }
 
 })
-//new code ends
-// app.get('/login',(req,res)=>{
-//      res.render('login')
-//  })
-//  app.get('/form-submit',(req,res)=>{
-//      if(req.query.email === 'a@a.com' && req.query.password=='a'){
-//           console.log("passed")
-//      }
-    
-//  })
-
-
- //server
-http.createServer(app).listen(8000,()=>{
+//server
+http.createServer(app).listen(8000, () => {
      console.log("running")
 })
