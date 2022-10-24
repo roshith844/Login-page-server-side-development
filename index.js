@@ -68,7 +68,7 @@ app.post('/form-submit',(req,res)=>{
      if(req.body.email === user.userName && req.body.password == user.password){
           req.session.user = req.body.email
           console.log('Logged In')
-          res.render('home')
+          res.redirect('/')
      }else{
           res.render('login',{layout : './layouts/invalid.ejs'})
      }
