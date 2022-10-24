@@ -1,2 +1,7 @@
 <h1>This is Home Page</h1>
 <a href="/logout"><button>Click Here to Log Out</button></a>
+<script>
+     if ( window.history.replaceState ) {
+     window.history.replaceState( null, null, window.location.href );
+     }
+ </script>
