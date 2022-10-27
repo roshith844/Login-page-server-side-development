@@ -5,7 +5,6 @@ const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
 // calls morgan
 var morgan = require('morgan')
 /* initialises npm modules */
