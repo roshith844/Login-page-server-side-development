@@ -6,7 +6,12 @@ const expressLayouts = require('express-ejs-layouts')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-//initialises npm modules
+// calls morgan
+var morgan = require('morgan')
+/* initialises npm modules */
+// using morgan middleware 
+app.use(morgan('tiny'))
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // middlewares not to store cache
